@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Classification Helper</title>
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon" href="./resources/images/favicon.ico">
+        <!-- Tailwind -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- Jquery -->
+        <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+        <!-- Icons -->
+        <link rel="stylesheet" href="https://cdn.lineicons.com/4.0/lineicons.css" />
+    </head>
+    <body class="p-10 bg-slate-50">
+        <!-- Header -->
+        <h1 class="flex flex-wrap items-center justify-center text-4xl font-bold text-center"><i class="lni lni-cloud-network me-2"></i>Web Ui Classification Helper</h1>
+
+        <!-- CSV Information -->
+        <div class="p-4 mx-auto my-4 border shadow rounded-xl w-fit" style="max-width: min(90%, 400px);">
+            <h2 class="flex items-center m-0 text-2xl font-semibold break-all"><i class="text-yellow-300 fill-yellow-100 lni lni-warning me-2"></i> Important</h2>
+            <p class="text-sm text-gray-500">The csv file must have 3 columns (id, date and text), it may or may not have a header.</p>
+        </div>
+
+        <!-- Upload Btn -->
+        <div class="relative mx-auto w-fit">
+            <button id="uploadBtn" class="flex items-center p-2 px-4 mx-auto mt-3 align-middle bg-white border rounded-full shadow w-fit hover:brightness-90 hover:cursor-pointer">
+                <i id="uplodaBtnIco1" class="lni lni-upload me-2"></i>
+                <i id="uplodaBtnIco2" class="lni lni-reload animate-spin me-2" hidden></i>
+                <p>Upload csv</p>
+            </button>
+            <p id="uploadFeedback" class="text-sm text-center text-red-600" hidden>The file is not valid.</p>
+            <input type="file" id="upload" accept=".csv" hidden aria-hidden="true">
+        </div>
+
+        <!-- Classification Wrapper -->
+        <div id="classificationWrapper" class="relative gap-2 p-5 mx-auto mt-6 text-center border rounded-lg shadow" style="max-width: min(500px, 90%); display: none;">
+            <!-- Close Btn -->
+            <span id="classificationClose" class="p-2 text-red-950 absolute top-0 end-0 translate-y-[-50%] translate-x-[50%] bg-red-300 border border-red-700 rounded-full min-w-6 max-w-6 min-h-6 max-h-6 text-[10px] flex items-center justify-center hover:cursor-pointer hover:brightness-90"><i class="lni lni-close"></i></span>
+
+            <!-- FileName -->
+            <span id="filename" class="text-gray-600">Hadassah.csv</span>
+
+            <!-- Number -->
+            <span id="number" class="flex items-center justify-center px-3 mx-auto font-bold border-2 rounded-full shadow w-fit min-w-10 min-h-10 bg-slate-200">1</span>
+
+            <!-- Date -->
+            <span id="date" class="text-xs text-gray-600">31 May. 2023</span>
+
+            <div class="flex items-center justify-between gap-5">
+                <!-- Prev -->
+                <button id="prev" class="flex items-center justify-center h-20 p-2 transition-all rounded-md max-w-12 min-w-12 max-h-12 min-h-12 bg-slate-50 hover:brightness-90 hover:scale-110 disabled:text-gray-300 disabled:hover:brightness-100 disabled:hover:scale-100">
+                    <i class="text-3xl lni lni-arrow-left"></i>
+                </button>
+
+                <!-- Message -->
+                <p id="message" class="font-semibold te'fast't-center capitalize">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque mattis ornare erat, aliquet condimentum eros fringilla id. Curabitur aliquet, ex in faucibus semper, arcu ante rutrum urna, facilisis sagittis neque felis nec lorem. Nulla congue risus et elit lacinia molestie. Ut non ex et purus vulputate consequat. </p>
+
+                <!-- Next -->
+                <button id="next" class="flex items-center justify-center h-20 p-2 transition-all rounded-md max-w-12 min-w-12 max-h-12 min-h-12 bg-slate-50 hover:brightness-90 hover:scale-110 disabled:text-gray-300 disabled:hover:brightness-100 disabled:hover:scale-100">
+                    <i class="text-3xl lni lni-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex items-center justify-center gap-6 mt-3">
+                <!-- Delete -->
+                <button data-sentiment="-1" class="relative flex flex-col items-center justify-center gap-2 p-3 transition-all bg-gray-200 border-2 border-gray-400 rounded-md shadow-md btnClass shadow-gray-300 min-w-24 max-w-24 min-h-24 max-h-24 hover:brightness-90 hover:scale-105 hover:cursor-pointer">
+                    <!-- Icon -->
+                    <i class="text-4xl text-gray-800 lni lni-trash-can"></i>
+                    <!-- Key -->
+                    <span class="flex items-center justify-center p-2 text-gray-800 border-2 border-gray-400 rounded-md opacity-60 min-w-6 max-w-6 min-h-6 max-h-6">0</span>
+                </button>
+                <!-- Sad -->
+                <button data-sentiment="2" class="relative flex flex-col items-center justify-center gap-2 p-3 transition-all bg-red-200 border-2 border-red-400 rounded-md shadow-md btnClass shadow-gray-300 min-w-24 max-w-24 min-h-24 max-h-24 hover:brightness-90 hover:scale-105 hover:cursor-pointer">
+                    <!-- Icon -->
+                    <i class="text-4xl text-red-800 lni lni-sad"></i>
+                    <!-- Key -->
+                    <span class="flex items-center justify-center p-2 text-red-800 border-2 border-red-400 rounded-md opacity-60 min-w-6 max-w-6 min-h-6 max-h-6">1</span>
+                </button>
+
+                <!-- Meh -->
+                <button data-sentiment="0" class="relative flex flex-col items-center justify-center gap-2 p-3 transition-all bg-yellow-200 border-2 border-yellow-400 rounded-md shadow-md btnClass shadow-gray-300 min-w-24 max-w-24 min-h-24 max-h-24 hover:brightness-90 hover:scale-105 hover:cursor-pointer">
+                    <!-- Icon -->
+                    <i class="text-4xl text-yellow-800 lni lni-speechless"></i>
+                    <!-- Key -->
+                    <span class="flex items-center justify-center p-2 text-yellow-800 border-2 border-yellow-400 rounded-md opacity-60 min-w-6 max-w-6 min-h-6 max-h-6">2</span>
+                </button>
+
+                <!-- Happy -->
+                <button data-sentiment="1" class="relative flex flex-col items-center justify-center gap-2 p-3 transition-all bg-green-200 border-2 border-green-400 rounded-md shadow-md btnClass shadow-gray-300 min-w-24 max-w-24 min-h-24 max-h-24 hover:brightness-90 hover:scale-105 hover:cursor-pointer">
+                    <!-- Icon -->
+                    <i class="text-4xl text-green-800 lni lni-smile"></i>
+                    <!-- Key -->
+                    <span class="flex items-center justify-center p-2 text-green-800 border-2 border-green-400 rounded-md opacity-60 min-w-6 max-w-6 min-h-6 max-h-6">3</span>
+                </button>
+            </div>
+            <!-- Hint -->
+            <p class="text-sm text-gray-400">Hint: you can use the keyboard keys</p>
+
+            <!-- Download Classified CSV -->
+            <a id="download" class="flex items-center p-2 px-4 mx-auto mt-4 bg-white border rounded-full shadow w-fit hover:brightness-90 disabled:text-gray-400 disabled:hover:brightness-100" style="display: none;;">
+                <i class="lni lni-download me-2"></i>
+                Download Classified csv
+            </a>
+        </div>
+    </body>
+</html>
+
+<script>
+    const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+    data           = [];
+    dataClassified = []
+    idx_element    = 0;
+
+    // Upload Button
+    $("#uploadBtn").click(e => {
+        $("#upload").trigger('click');
+    })
+
+    // Upload
+    $("#upload").change(e => {
+        idx_element = 0;
+        dataClassified = [];
+
+        element = $(e.currentTarget);
+
+        // Validate
+        file = e.target.files[0];
+
+        if (!file) { return; }
+
+        // Validate extension
+        if (!file.name.endsWith(".csv")) {
+            $("#uploadFeedback").show();
+            $("#uploadFeedback").html("The file is not csv");
+            $("#uploadBtn").addClass("hover:bg-red-200").removeClass('hover:bg-slate-200');
+            $("#uploadBtn").addClass("bg-red-100").removeClass('bg-white');
+            $("#uploadBtn").addClass("border-red-400");
+
+            element.val("");
+
+            return;
+        } else {
+            $("#uploadFeedback").hide();
+            $("#uploadBtn").removeClass("hover:bg-red-200").addClass('hover:bg-slate-200');
+            $("#uploadBtn").removeClass("bg-red-100").addClass('bg-white');
+            $("#uploadBtn").removeClass("border-red-400");
+        }
+
+        ReadFile(file).then((_data) => {
+            data = _data;
+            updateClassificationWrapper();
+        }).catch((error) => {
+            $("#uploadFeedback").show();
+            $("#uploadFeedback").html(error);
+            $("#uploadBtn").addClass("hover:bg-red-200").removeClass('hover:bg-slate-200');
+            $("#uploadBtn").addClass("bg-red-100").removeClass('bg-white');
+            $("#uploadBtn").addClass("border-red-400");
+
+            element.val("");
+        })
+    });
+
+    $("#classificationClose").click(e => {
+        data           = [];
+        dataClassified = []
+        idx_element    = 0;
+        $("#upload").val("");
+
+        $("#classificationWrapper").hide();
+        updateDownloadButton();
+    })
+
+    function getLinesFromText(text) {
+        if (text == "") { return []; }
+        lines = text.replace(/\r/g, '').split('\n');
+        
+        data = [];
+
+        // Delete invalid rows
+        lines = lines.filter(l => {
+            values = l.split(',');
+            values[2] = values.slice(2).join(',');
+
+            values = values.slice(0, 3);
+
+            if (values.length == 3) {
+                // Validation
+                if (isNaN(values[0]) || values[0] == "" &&
+                    isNaN(values[1]) || values[1] == "" &&
+                    isNaN(values[2]) || values[2] == ""
+                ) { return; }
+
+                // More validation
+                if (isNaN(values[0]) ||
+                    (new Date(values[1]) === "Invalid Date") || isNaN(new Date(values[1]))
+                ) { return; }
+
+                data.push(values)
+            }
+        })
+
+        return data;
+    }
+
+    function ReadFile(file) {
+        return new Promise((resolve, reject) => {
+            reader = new FileReader();
+            reader.onloadstart = () => {
+                $("#uploadBtnIco1").hide();
+                $("#uploadBtnIco2").show();
+                
+            }
+            reader.onloadend = () => {
+                $("#uploadBtnIco1").show();
+                $("#uploadBtnIco2").hide();
+            }
+
+            reader.onload = (f) => {
+                text = (f.target.result).replace(/\n(?![0-9])/g, ' ').replaceAll('"', '');
+
+                lines = getLinesFromText(text);
+
+                if (lines.length > 0) {
+                    resolve(lines)
+                } 
+
+                reject("The file is not valid.");
+            }
+
+            reader.readAsText(file);
+        })
+    }
+
+    function updateClassificationWrapper() {
+        if (data.length <= 0) { return; }
+
+        $("#classificationWrapper").show();
+
+        // FileName
+        $("#filename").html($("#upload")[0].files[0].name);
+
+        // Number
+        $("#number").html(idx_element + 1 + " / " + data.length);
+        
+        e       = data[idx_element];
+        idx     = e[0];
+        date    = e[1];
+        message = e[2].toLowerCase();
+
+        // Date
+        objectDate = new Date(date)
+        $("#date").html(objectDate.getDate() + ' ' + monthNames[objectDate.getMonth()].slice(0, 3) + '. ' + objectDate.getFullYear());
+
+        // Message 
+        $("#message").html(message);
+
+        // Lateral Buttons
+        if (idx_element <= 0) {
+            $("#prev").prop('disabled', true);
+        } else {
+            $("#prev").prop('disabled', false);
+        }
+        if (idx_element >= dataClassified.length) {
+            $("#next").prop('disabled', true);
+        } else {
+            $("#next").prop('disabled', false);
+        }
+
+        // Reset Selected Buttons
+        $('.btnSelected').removeClass('btnSelected');
+
+        // Selected Buttons
+        if (dataClassified[idx_element] != undefined) {
+            switch (dataClassified[idx_element][1]) {
+                case "-1":
+                    $(".btnClass[data-sentiment='-1']").addClass('btnSelected');
+                    break;
+                case "0":
+                    $(".btnClass[data-sentiment='0']").addClass('btnSelected');
+                    break;
+                case "1":
+                    $(".btnClass[data-sentiment='1']").addClass('btnSelected');
+                    break;
+                case "2":
+                    $(".btnClass[data-sentiment='2']").addClass('btnSelected');
+                    break;
+            }
+        }
+
+        updateDownloadButton();
+    }
+
+    function updateDownloadButton() {
+        if (dataClassified.length == 0) {
+            $("#download").hide();
+            return;
+        }
+
+        $("#download").show();
+    }
+
+    // Event Listeners for classification Wrapper
+    $(document).on('keydown', e => {
+        if (!$("#classificationWrapper").is(":visible")) {
+            return;
+        }
+
+        switch (e.key) {
+            case "0":
+                $(".btnClass[data-sentiment='-1']").trigger('click');
+            case "1":
+                $(".btnClass[data-sentiment='2']").trigger('click');
+                break;
+            case "2":
+                $(".btnClass[data-sentiment='0']").trigger('click');
+                break;
+            case "3":
+                $(".btnClass[data-sentiment='1']").trigger('click');
+                break;
+        }
+    })
+
+    $(".btnClass").click(e => {
+        sentiment = $(e.currentTarget).attr('data-sentiment');
+
+        $(e.currentTarget).addClass('btnSelected');
+
+        if (dataClassified[idx_element] != undefined) {
+            dataClassified[idx_element][1] = sentiment;
+        } else {
+            dataClassified.push([data[idx_element][2], sentiment]);
+        }
+
+        if (idx_element < data.length - 1) {
+            idx_element += 1;
+        }
+
+        setTimeout(updateClassificationWrapper, 200);
+    });
+
+    $("#prev").click(e => {
+        if (idx_element > 0) {
+            idx_element -= 1;
+        }
+
+        updateClassificationWrapper();
+    });
+
+    $("#next").click(e => {
+        if (idx_element < data.length - 1) {
+            idx_element += 1;
+        }
+
+        updateClassificationWrapper();
+    });
+
+    function getCsvData() {
+        csvData = "";
+
+        i = 0;
+
+        dataClassified.forEach(l => {
+            if (l[1] != "-1") {
+                csvData += `${i},${l[0]},${l[1]}`
+                i+=1;
+
+                if (l != dataClassified[dataClassified.length - 1]) {
+                    csvData += '\n';
+                }
+            }
+        });
+
+        return csvData;
+    }
+
+    // Download
+    $("#download").click(e => {
+        element = $(e.currentTarget);
+
+        csvData = getCsvData();
+
+        blob     = new Blob([csvData], { type: 'text/csv' });
+        url      = URL.createObjectURL(blob);
+        filename = $("#upload")[0].files[0].name.split('.')[0] + "_classified" +  ".csv";
+        
+        element.attr('href', url);
+        element.attr('download', filename);
+    });
+
+    // Tailwind Config
+    tailwind.config = {
+        theme: {
+            fontFamily: {
+                sans : ['Nunito Variable', 'sans-serif']
+            }
+        }
+    }
+</script>
+
+<style>
+    @font-face {
+        font-family: 'Nunito Variable';
+        font-style: normal;
+        font-display: swap;
+        font-weight: 200 1000;
+        src: url(https://cdn.jsdelivr.net/fontsource/fonts/nunito:vf@latest/latin-wght-normal.woff2) format('woff2-variations');
+        unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+2074,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+    }
+
+
+    .btnSelected {
+        border: 2px solid rgb(37 99 235);
+    }
+
+    .btnSelected::after {
+        content: '✔';
+        display: flex;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translate(50%, -50%);
+        justify-content: center;
+        align-items: center;
+        width: 20px;
+        height: 20px;
+        border-radius: 3px;
+        border: 1px solid rgb(30 58 138);
+        color: white;
+        background-color: rgb(37 99 235);
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)
+    }
+</style>

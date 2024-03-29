@@ -1,0 +1,8 @@
+# Node for tailwind (just install for autocomplete)
+node_modules
+package-lock.json
+package.json
+tailwind.config.js
+
+# VsCode
+.vscode
