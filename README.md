@@ -16,10 +16,10 @@ cd ClassificationUIHelper
 
 # Improvements In Time
 Up to 40% improvement in classification speed
-![](graph.png)
+![](pictures/graph.png)
 
 # Example Usages
-![](screenshot.png)
+![](pictures/screenshot.png)
 
 input.csv
 ```csv
